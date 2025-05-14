@@ -25,10 +25,10 @@ variable "tags" {
 
 variable "endpoints" {
   type = map(object({
-    name                = string
-    target_resource_id  = string
-    location            = string
-    priority            = optional(number)
+    name               = string
+    target_resource_id = string
+    location           = string
+    priority           = optional(number)
   }))
   description = "Traffic Manager endpoints"
 }

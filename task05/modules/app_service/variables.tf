@@ -24,7 +24,7 @@ variable "tags" {
 }
 
 variable "ip_restrictions" {
-    
+
   type = list(object({
     name        = string
     ip_address  = optional(string)
