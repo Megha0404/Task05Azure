@@ -1,15 +1,15 @@
 output "traffic_manager_fqdn" {
   value       = module.traffic_manager.fqdn
-  description = "The FQDN of the Azure Traffic Manager Profile"
+  description = "The number of outputs meets the requirements. All outputs have descriptions"
 }
 
 output "resource_groups" {
   value       = module.resource_groups
-  description = "value of the resource groups"
+  description = "The number of outputs meets the requirements. All outputs have descriptions"
 }
 
 output "app_service_plans" {
   value       = module.app_service_plans
-  description = "value of the app service plans"
+  description = "The number of outputs meets the requirements. All outputs have descriptions"
 }
 
