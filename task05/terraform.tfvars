@@ -37,7 +37,6 @@ app_services = {
   app1 = {
     name                = "cmaz-2olzzm40-mod5-app-01"
     location            = "eastus"
-    app_service_plan_id = ""
     resource_group_name = "cmaz-2olzzm40-mod5-rg-01"
     ip_restrictions = [
       {
@@ -51,13 +50,18 @@ app_services = {
         service_tag = "AzureTrafficManager"
         priority    = 200
         action      = "Allow"
+      },
+      {
+        name       = "deny-all"
+        ip_address = "Any"
+        priority   = 2147483647
+        action     = "Deny"
       }
     ]
   }
   app2 = {
     name                = "cmaz-2olzzm40-mod5-app-02"
     location            = "westus"
-    app_service_plan_id = ""
     resource_group_name = "cmaz-2olzzm40-mod5-rg-02"
     ip_restrictions = [
       {
@@ -71,11 +75,16 @@ app_services = {
         service_tag = "AzureTrafficManager"
         priority    = 200
         action      = "Allow"
+      },
+      {
+        name       = "deny-all"
+        ip_address = "Any"
+        priority   = 2147483647
+        action     = "Deny"
       }
     ]
   }
 }
-
 app_service_to_plan_map = {
   app1 = "asp1"
   app2 = "asp2"
