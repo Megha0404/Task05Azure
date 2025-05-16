@@ -53,10 +53,10 @@ app_services = {
         action      = "Allow"
       },
       {
-        name       = "deny-all"
-        ip_address = "Any"
-        priority   = 2147483647
-        action     = "Deny"
+        name        = "deny-all"
+        service_tag = "Any"
+        priority    = 2147483647
+        action      = "Deny"
       }
     ]
   }
@@ -79,10 +79,10 @@ app_services = {
         action      = "Allow"
       },
       {
-        name       = "deny-all"
-        ip_address = "Any"
-        priority   = 2147483647
-        action     = "Deny"
+        name        = "deny-all"
+        service_tag = "Any"
+        priority    = 2147483647
+        action      = "Deny"
       }
     ]
   }
