@@ -17,3 +17,16 @@ resource "azurerm_traffic_manager_profile" "this" {
   tags = var.tags
 }
 
+# Create explicit Traffic Manager endpoints for Windows Web Apps
+resource "azurerm_traffic_manager_azure_endpoint" "app1_endpoint" {
+  name               = "app1-endpoint"
+  profile_id         = azurerm_traffic_manager_profile.this.id
+  target_resource_id = var.endpoints["app1"].target_resource_id
+}
+
+resource "azurerm_traffic_manager_azure_endpoint" "app2_endpoint" {
+  name               = "app2-endpoint"
+  profile_id         = azurerm_traffic_manager_profile.this.id
+  target_resource_id = var.endpoints["app2"].target_resource_id
+
+}

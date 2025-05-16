@@ -1,34 +1,28 @@
 variable "name" {
   type        = string
-  description = "The name of the Traffic Manager Profile"
+  description = "Name of the Traffic Manager profile"
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "The resource group for the Traffic Manager"
-}
-
-variable "location" {
-  type        = string
-  description = "Location of the resource group"
+  description = "Name of the resource group for Traffic Manager"
 }
 
 variable "routing_method" {
   type        = string
-  description = "Routing method for Traffic Manager"
+  description = "Routing Method for Traffic Manager"
 }
 
 variable "tags" {
   type        = map(string)
-  description = "Tags for the Traffic Manager profile"
+  description = "Tags for resources"
 }
 
 variable "endpoints" {
   type = map(object({
     name               = string
     target_resource_id = string
-    location           = string
-    priority           = optional(number)
+
   }))
-  description = "Traffic Manager endpoints"
+  description = "Map of endpoints to be added in Traffic Manager"
 }

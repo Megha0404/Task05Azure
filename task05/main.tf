@@ -39,25 +39,22 @@ module "app_services" {
 
 # Update Traffic Manager to reference App Services
 module "traffic_manager" {
-  source = "./modules/traffic_manager"
-
+  source              = "./modules/traffic_manager"
   name                = var.traffic_manager.name
   resource_group_name = module.resource_groups["rg3"].resource_group["name"]
-  location            = var.traffic_manager.location
   routing_method      = var.traffic_manager.routing_method
 
   endpoints = {
-    endpoint1 = {
+    app1 = {
       name               = "app1-endpoint"
       target_resource_id = module.app_services["app1"].app_service["id"]
-      location           = var.app_services["app1"].location
     }
-    endpoint2 = {
+    app2 = {
       name               = "app2-endpoint"
       target_resource_id = module.app_services["app2"].app_service["id"]
-      location           = var.app_services["app2"].location
     }
   }
 
   tags = var.resource_tags
+
 }
