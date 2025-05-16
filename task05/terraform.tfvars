@@ -54,8 +54,7 @@ app_services = {
       },
       {
         name        = "deny-all"
-        ip_address  = "Any"
-        service_tag = "Any"
+        service_tag = "Internet"
         priority    = 2147483647
         action      = "Deny"
       }
@@ -81,8 +80,7 @@ app_services = {
       },
       {
         name        = "deny-all"
-        ip_address  = "Any"
-        service_tag = "Any"
+        service_tag = "Internet"
         priority    = 2147483647
         action      = "Deny"
       }
