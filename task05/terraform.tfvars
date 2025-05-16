@@ -42,7 +42,7 @@ app_services = {
     ip_restrictions = [
       {
         name       = "allow-ip"
-        ip_address = "18.153.146.156"
+        ip_address = "18.153.146.156/32"
         priority   = 100
         action     = "Allow"
       },
@@ -62,7 +62,7 @@ app_services = {
     ip_restrictions = [
       {
         name       = "allow-ip"
-        ip_address = "18.153.146.156"
+        ip_address = "18.153.146.156/32"
         priority   = 100
         action     = "Allow"
       },
