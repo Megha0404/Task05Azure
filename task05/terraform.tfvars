@@ -54,7 +54,7 @@ app_services = {
       },
       {
         name        = "deny-all"
-        service_tag = "Internet"
+        service_tag = "Any"
         priority    = 2147483647
         action      = "Deny"
       }
@@ -80,7 +80,7 @@ app_services = {
       },
       {
         name        = "deny-all"
-        service_tag = "Internet"
+        service_tag = "Any"
         priority    = 2147483647
         action      = "Deny"
       }

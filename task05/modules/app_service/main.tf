@@ -2,12 +2,11 @@ resource "azurerm_windows_web_app" "this" {
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
-  service_plan_id     = var.service_plan_id # Corrected from app_service_plan_id to service_plan_id
+  service_plan_id     = var.service_plan_id
 
   site_config {
     always_on = true
 
-    # Define IP restrictions dynamically
     dynamic "ip_restriction" {
       for_each = var.ip_restrictions
       content {
@@ -25,4 +24,6 @@ resource "azurerm_windows_web_app" "this" {
   }
 
   tags = var.tags
+
+  depends_on = [var.service_plan_id]
 }
