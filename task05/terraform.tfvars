@@ -38,6 +38,7 @@ app_services = {
     name                = "cmaz-2olzzm40-mod5-app-01"
     location            = "eastus"
     resource_group_name = "cmaz-2olzzm40-mod5-rg-01"
+    service_plan_id     = "asp1"
     ip_restrictions = [
       {
         name       = "allow-ip"
@@ -63,6 +64,7 @@ app_services = {
     name                = "cmaz-2olzzm40-mod5-app-02"
     location            = "westus"
     resource_group_name = "cmaz-2olzzm40-mod5-rg-02"
+    service_plan_id     = "asp2"
     ip_restrictions = [
       {
         name       = "allow-ip"
