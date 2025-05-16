@@ -1,60 +1,65 @@
-# Create Resource Groups
-module "resource_groups" {
-  source = "./modules/resource_group"
-
+module "rg" {
+  source   = "./modules/resource_group"
   for_each = var.resource_groups
-
   name     = each.value.name
   location = each.value.location
-  tags     = var.resource_tags
+  tags     = var.tags
 }
 
-# Create App Service Plans
-module "app_service_plans" {
-  source = "./modules/app_service_plan"
+module "ASP" {
+  source         = "./modules/app_service_plan"
+  for_each       = var.app_service_plans
+  name           = each.value.name
+  sku            = each.value.sku
+  worker_count   = each.value.worker_count
+  resource_group = var.resource_groups[each.value.rg_key].name
+  location       = var.resource_groups[each.value.rg_key].location
+  os_type        = each.value.os_type
+  tags           = var.tags
 
-  for_each = var.app_service_plans
-
-  name                = each.value.name
-  location            = each.value.location
-  resource_group_name = module.resource_groups[var.app_service_plan_to_rg_map[each.key]].resource_group["name"]
-  sku_name            = each.value.sku.size
-  os_type             = "Windows"
-  worker_count        = each.value.instances
-  tags                = var.resource_tags
+  depends_on = [module.rg]
 }
-# Update App Services to reference App Service Plans
-module "app_services" {
-  source = "./modules/app_service"
 
+module "APP" {
+  source   = "./modules/app_service"
   for_each = var.app_services
 
   name                = each.value.name
-  location            = each.value.location
-  resource_group_name = each.value.resource_group_name
-  service_plan_id     = module.app_service_plans[var.app_service_to_plan_map[each.key]].app_service_plan["id"] # Use the mapping to resolve service plan ID
-  ip_restrictions     = each.value.ip_restrictions
-  tags                = var.resource_tags
+  location            = var.resource_groups[each.value.rg_key].location
+  resource_group      = var.resource_groups[each.value.rg_key].name
+  app_service_plan_id = module.ASP[each.value.asp_key].ASP_id
+  allow-ip            = var.allow-ip
+  allow_ip_rule       = var.allow_ip_rule
+  allow_tag_rule      = var.allow_tag_rule
+  tags                = var.tags
+
+  depends_on = [module.ASP]
 }
 
-# Update Traffic Manager to reference App Services
 module "traffic_manager" {
-  source              = "./modules/traffic_manager"
-  name                = var.traffic_manager.name
-  resource_group_name = module.resource_groups["rg3"].resource_group["name"]
-  routing_method      = var.traffic_manager.routing_method
+  source = "./modules/traffic_manager"
+  name   = var.traf_name
+
+  resource_group = var.resource_groups[var.tr_rg].name
+
+  routing_method = var.traf_routing_method
 
   endpoints = {
     app1 = {
-      name               = "app1-endpoint"
-      target_resource_id = module.app_services["app1"].app_service["id"]
-    }
+      name        = var.app_services[var.tr_app1].name
+      target      = module.APP[var.tr_app1].app_hostname
+      resource_id = module.APP[var.tr_app1].app_id
+      pr          = var.pr_app1
+    },
     app2 = {
-      name               = "app2-endpoint"
-      target_resource_id = module.app_services["app2"].app_service["id"]
+      name        = var.app_services[var.tr_app2].name
+      target      = module.APP[var.tr_app2].app_hostname
+      resource_id = module.APP[var.tr_app2].app_id
+      pr          = var.pr_app2
     }
   }
 
-  tags = var.resource_tags
+  tags = var.tags
 
+  depends_on = [module.APP]
 }

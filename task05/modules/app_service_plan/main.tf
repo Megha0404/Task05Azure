@@ -1,11 +1,9 @@
-resource "azurerm_service_plan" "this" {
+resource "azurerm_service_plan" "ASP" {
   name                = var.name
+  resource_group_name = var.resource_group
   location            = var.location
-  resource_group_name = var.resource_group_name
-
-  sku_name     = var.sku_name
-  os_type      = var.os_type
-  worker_count = var.worker_count
-
-  tags = var.tags
+  os_type             = var.os_type
+  sku_name            = var.sku
+  worker_count        = var.worker_count
+  tags                = var.tags
 }

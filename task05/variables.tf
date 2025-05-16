@@ -1,79 +1,82 @@
-# Variables for resource groups
 variable "resource_groups" {
+  description = "Map of resource groups with names and locations"
   type = map(object({
     name     = string
     location = string
   }))
-  description = "Map of resource groups to create, including name and location"
 }
 
-# Variables for App Service Plans
+variable "tags" {
+  description = "Tags to apply on resources"
+  type        = map(string)
+}
+
 variable "app_service_plans" {
+  description = "Map of App Service Plans"
   type = map(object({
-    name     = string
-    location = string
-    sku = object({
-      size = string
-      tier = string
-    })
-    instances = number
+    name         = string
+    sku          = string
+    worker_count = string
+    os_type      = string
+    rg_key       = string
   }))
-  description = "Map of App Service Plans to create"
 }
 
-# Variables for App Services
 variable "app_services" {
+  description = "Map of App Services"
   type = map(object({
-    name                = string
-    location            = string
-    app_service_plan_id = string
-    resource_group_name = string
-    ip_restrictions = list(object({
-      name        = string
-      ip_address  = optional(string)
-      service_tag = optional(string)
-      priority    = number
-      action      = string
-    }))
+    name    = string
+    rg_key  = string
+    asp_key = string
   }))
-  description = "Map of App Services (Windows Web Apps) to configure"
 }
 
-# Variables for Traffic Manager Profile
-variable "traffic_manager" {
-  type = object({
-    name           = string
-    resource_group = string
-    location       = string
-    routing_method = string
-    endpoints = map(object({
-      name               = string
-      target_resource_id = string
-      location           = string
-      priority           = optional(number)
-    }))
-  })
-  description = "Traffic Manager configuration"
+variable "allow-ip" {
+  description = "Verification agent IP Address"
+  type        = string
 }
 
-# Tags for all resources
-variable "resource_tags" {
-  type        = map(string)
-  description = "Global tags for all resources"
+variable "allow_ip_rule" {
+  description = "Name of IP Allow rule"
+  type        = string
 }
 
-variable "app_service_plan_to_rg_map" {
-  type        = map(string)
-  description = "Mapping of app service plans to their corresponding resource group keys"
+variable "allow_tag_rule" {
+  description = "Name of service tag Allow rule"
+  type        = string
 }
 
-# Example usage in terraform.tfvars:
-# app_service_plan_to_rg_map = {
-#   asp1 = "rg1"
-#   asp2 = "rg2"
-# }
+variable "traf_name" {
+  description = "Name of the Traffic Manager profile"
+  type        = string
+}
 
-variable "app_service_to_plan_map" {
-  type        = map(string)
-  description = "Mapping of app services to their corresponding app service plans"
+variable "traf_routing_method" {
+  description = "Routing method for the Traffic Manager"
+  type        = string
+}
+
+variable "tr_rg" {
+  description = "Resource Group for Traffic Manager"
+  type        = string
+}
+
+variable "tr_app1" {
+  description = "App 1 for Traffic Manager Endpoint"
+  type        = string
+}
+
+variable "tr_app2" {
+  description = "App 2 for Traffic Manager Endpoint"
+  type        = string
+}
+
+variable "pr_app1" {
+  description = "Priority of App 1"
+  type        = string
+}
+
+variable "pr_app2" {
+  description = "Priority of App 2"
+  type        = string
 }

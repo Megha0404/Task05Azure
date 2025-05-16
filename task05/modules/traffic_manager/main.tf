@@ -1,6 +1,6 @@
-resource "azurerm_traffic_manager_profile" "this" {
+resource "azurerm_traffic_manager_profile" "tm_p" {
   name                   = var.name
-  resource_group_name    = var.resource_group_name
+  resource_group_name    = var.resource_group
   traffic_routing_method = var.routing_method
 
   dns_config {
@@ -17,16 +17,14 @@ resource "azurerm_traffic_manager_profile" "this" {
   tags = var.tags
 }
 
-# Create explicit Traffic Manager endpoints for Windows Web Apps
-resource "azurerm_traffic_manager_azure_endpoint" "app1_endpoint" {
-  name               = "app1-endpoint"
-  profile_id         = azurerm_traffic_manager_profile.this.id
-  target_resource_id = var.endpoints["app1"].target_resource_id
-}
+resource "azurerm_traffic_manager_azure_endpoint" "endpoints" {
+  for_each   = var.endpoints
+  name       = each.value.name
+  profile_id = azurerm_traffic_manager_profile.tm_p.id
 
-resource "azurerm_traffic_manager_azure_endpoint" "app2_endpoint" {
-  name               = "app2-endpoint"
-  profile_id         = azurerm_traffic_manager_profile.this.id
-  target_resource_id = var.endpoints["app2"].target_resource_id
+  target_resource_id = each.value.resource_id
 
+  priority = each.value.pr
+
+  depends_on = [azurerm_traffic_manager_profile.tm_p]
 }
