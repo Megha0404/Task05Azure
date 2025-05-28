@@ -4,11 +4,11 @@ variable "aks_loadbalancer_ip" {
 }
 
 variable "resource_group_name" {
-    description = "Resource group name"
-  type = string
+  description = "Resource group name"
+  type        = string
 }
 
 variable "vnet_name" {
-    description = "Vnet name"
-  type = string
+  description = "Vnet name"
+  type        = string
 }
