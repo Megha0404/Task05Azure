@@ -60,52 +60,68 @@ data "azurerm_subnet" "aks" {
 
 # Rules
 resource "azurerm_firewall_network_rule_collection" "network_rule" {
-  name                = "networkRule"
+  name                = "${var.prefix}-network-rule"
   azure_firewall_name = azurerm_firewall.afw.name
   resource_group_name = var.resource_group_name
   priority            = 100
   action              = "Allow"
 
-  rule {
-    name                  = "AllowDNS"
-    protocols             = ["UDP"]
-    source_addresses      = ["10.0.0.0/24"]
-    destination_addresses = ["*"]
-    destination_ports     = ["53"]
+  dynamic "rule" {
+    for_each = var.network_rules
+    content {
+      name                  = rule.value.name
+      protocols             = rule.value.protocols
+      source_addresses      = rule.value.source_addresses
+      destination_addresses = rule.value.destination_addresses
+      destination_ports     = rule.value.destination_ports
+    }
   }
+
 }
 
 
 resource "azurerm_firewall_application_rule_collection" "app_rule" {
-  name                = "appRule"
+  name                = "${var.prefix}-app-rule"
   azure_firewall_name = azurerm_firewall.afw.name
   resource_group_name = var.resource_group_name
   priority            = 101
   action              = "Allow"
-  rule {
-    name             = "AllowHttp"
-    source_addresses = ["10.0.0.0/24"]
-    target_fqdns     = ["www.bing.com"]
-    protocol {
-      port = 80
-      type = "Http"
+  dynamic "rule" {
+    for_each = var.application_rules
+    content {
+      name             = rule.value.name
+      source_addresses = rule.value.source_addresses
+      target_fqdns     = rule.value.target_fqdns
+
+      dynamic "protocol" {
+        for_each = rule.value.protocols
+        content {
+          port = protocol.value.port
+          type = protocol.value.type
+        }
+      }
     }
   }
+
 }
 
 resource "azurerm_firewall_nat_rule_collection" "nat_rule" {
-  name                = "natRule"
+  name                = "${var.prefix}-nat-rule"
   azure_firewall_name = azurerm_firewall.afw.name
   resource_group_name = var.resource_group_name
   priority            = 102
   action              = "Dnat"
-  rule {
-    name                  = "HTTPInbound"
-    protocols             = ["TCP"]
-    source_addresses      = ["*"]
-    destination_ports     = ["80"]
-    destination_addresses = [azurerm_public_ip.afw_pip.ip_address]
-    translated_address    = var.aks_loadbalancer_ip
-    translated_port       = "80"
+  dynamic "rule" {
+    for_each = var.nat_rules
+    content {
+      name                  = rule.value.name
+      protocols             = rule.value.protocols
+      source_addresses      = rule.value.source_addresses
+      destination_ports     = rule.value.destination_ports
+      destination_addresses = rule.value.destination_addresses
+      translated_address    = rule.value.translated_address
+      translated_port       = rule.value.translated_port
+    }
   }
+
 }
