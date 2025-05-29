@@ -1,5 +1,5 @@
 subscription_id        = "7e6a661c-8f9f-4149-b0df-5a01abea0a8e"
-aks_loadbalancer_ip    = "48.216.141.9"
+aks_loadbalancer_ip    = "48.217.206.216"
 location               = "East US"
 vnet_address_space     = "10.0.0.0/16"
 firewall_subnet_prefix = "10.0.2.0/24"
